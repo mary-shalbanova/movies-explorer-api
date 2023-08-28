@@ -93,6 +93,11 @@ const updateUserInfo = async (req, res, next) => {
     });
     res.status(STATUS_CODE_OK).send({ name: user.name, email: user.email });
   } catch (err) {
+    if (err.code === 11000) {
+      next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
+      return;
+    }
+
     next(err);
   }
 };

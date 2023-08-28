@@ -9,7 +9,7 @@ const { STATUS_CODE_OK, STATUS_CODE_CREATED } = require('../utils/constants');
 
 const getSavedMovies = async (req, res, next) => {
   try {
-    const movieList = await Movie.find({});
+    const movieList = await Movie.find({ owner: req.user._id });
     res.status(STATUS_CODE_OK).send(movieList);
   } catch (err) {
     next(err);
@@ -18,19 +18,6 @@ const getSavedMovies = async (req, res, next) => {
 
 const createMovie = async (req, res, next) => {
   try {
-    // const {
-    //   country,
-    //   director,
-    //   duration,
-    //   year,
-    //   description,
-    //   image,
-    //   trailerLink,
-    //   nameRU,
-    //   nameEN,
-    //   thumbnail,
-    //   movieId,
-    // } = req.body;
     const movie = await Movie.create({
       owner: req.user._id,
       ...req.body,
