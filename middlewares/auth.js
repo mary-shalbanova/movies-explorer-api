@@ -9,7 +9,7 @@ const auth = (req, res, next) => {
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'secret-key');
   } catch (err) {
-    next(new UnauthorizedError('Передан некорректный токен'));
+    next(new UnauthorizedError('Необходимо авторизоваться'));
     return;
   }
   req.user = payload;
