@@ -20,7 +20,11 @@ mongoose.connect(DB_URL, {
   useUnifiedTopology: false,
 });
 
-app.use(cors());
+app.use(cors({ origin: ['http://localhost:3000', 'http://movies.mary.nomoredomainsicu.ru', 'https://movies.mary.nomoredomainsicu.ru'], credentials: true }));
+mongoose.connect(DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: false,
+});
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
