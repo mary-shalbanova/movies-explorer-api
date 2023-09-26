@@ -12,17 +12,25 @@ const { STATUS_CODE_OK, STATUS_CODE_CREATED } = require('../utils/constants');
 
 const createUser = async (req, res, next) => {
   try {
-    const {
-      name,
-      email,
-      password,
-    } = req.body;
+    const { name, email, password } = req.body;
     const hash = await bcrypt.hash(password, 10);
-    await User.create({
+    const user = await User.create({
       name,
       email,
       password: hash,
     });
+    const token = jwt.sign(
+      { _id: user._id },
+      NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
+      { expiresIn: '7d' },
+    );
+
+    res.cookie('jwt', token, {
+      maxAge: 3600000 * 24 * 7,
+      httpOnly: true,
+      sameSite: true,
+    });
+
     res.status(STATUS_CODE_CREATED).send({
       name,
       email,
@@ -69,7 +77,10 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res) => {
-  res.status(STATUS_CODE_OK).clearCookie('jwt').send({ message: 'Выполнен выход' });
+  res
+    .status(STATUS_CODE_OK)
+    .clearCookie('jwt')
+    .send({ message: 'Выполнен выход' });
 };
 
 const getCurrentUser = async (req, res, next) => {
@@ -87,10 +98,14 @@ const getCurrentUser = async (req, res, next) => {
 const updateUserInfo = async (req, res, next) => {
   try {
     const { name, email } = req.body;
-    const user = await User.findByIdAndUpdate(req.user._id, { name, email }, {
-      new: true,
-      runValidators: true,
-    });
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { name, email },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     res.status(STATUS_CODE_OK).send({ name: user.name, email: user.email });
   } catch (err) {
     if (err.code === 11000) {
