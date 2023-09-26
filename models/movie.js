@@ -65,7 +65,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /[А-Яа-яЁё0-9\W]/.test(v);
+        return /[А-Яа-яЁёA-Za-z0-9\W]/.test(v);
       },
       message: 'Название фильма должно быть на русском языке',
     },

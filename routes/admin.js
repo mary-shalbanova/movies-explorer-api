@@ -4,6 +4,6 @@ const { createUserValidation, loginValidation } = require('../middlewares/userVa
 
 adminRoutes.post('/signup', createUserValidation, createUser);
 adminRoutes.post('/signin', loginValidation, login);
-adminRoutes.post('/signout', logout);
+adminRoutes.get('/signout', logout);
 
 module.exports = adminRoutes;

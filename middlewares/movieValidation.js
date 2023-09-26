@@ -11,14 +11,14 @@ const createMovieValidation = celebrate({
     trailerLink: Joi.string().required().regex(/(https?:\/\/)(w{3}\.)?(\w-?)+\.[A-Za-z0-9](-\._~:\/?#\[]@!$&'()*\+,;=#?)?/),
     thumbnail: Joi.string().required().regex(/(https?:\/\/)(w{3}\.)?(\w-?)+\.[A-Za-z0-9](-\._~:\/?#\[]@!$&'()*\+,;=#?)?/),
     movieId: Joi.number().required(),
-    nameRU: Joi.string().required().regex(/[А-Яа-яЁё0-9\W]/),
+    nameRU: Joi.string().required().regex(/[А-Яа-яЁёA-Za-z0-9\W]/),
     nameEN: Joi.string().required().regex(/[A-Za-z0-9\s]/),
   }),
 });
 
 const movieIdValidation = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().length(24).hex().required(),
+    movieId: Joi.string().required(),
   }),
 });
 

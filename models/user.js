@@ -13,8 +13,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     validate: {
-      validator: validator.isEmail,
-      message: 'Введен невалидный email',
+      validator(v) {
+        return /^[a-zA-Z0-9._]+@[a-zA-Z0-9_]+\.[a-z]{2,4}$/.test(v);
+      },
+      message: 'Неверный формат почты',
     },
   },
   password: {
