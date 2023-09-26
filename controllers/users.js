@@ -14,23 +14,11 @@ const createUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({
+    await User.create({
       name,
       email,
       password: hash,
     });
-    const token = jwt.sign(
-      { _id: user._id },
-      NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
-      { expiresIn: '7d' },
-    );
-
-    res.cookie('jwt', token, {
-      maxAge: 3600000 * 24 * 7,
-      httpOnly: true,
-      sameSite: true,
-    });
-
     res.status(STATUS_CODE_CREATED).send({
       name,
       email,
